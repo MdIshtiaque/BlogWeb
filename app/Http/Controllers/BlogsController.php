@@ -61,13 +61,12 @@ class BlogsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($post_id)
     {
-        $posts = Post::whereId($id)->first();
-        $comments = Comment::whereId($id)->get();
-        $users = User::whereId($id)->get();
-        //$comments = Comment::query()->select(['id', 'post_id', 'user_id', 'comment_des', 'created_at']);
-        return view('frontend.pages.blog_detailes', compact('posts', 'comments', 'users'));
+        $comments = Comment::wherePost_id($post_id)->with(['user', 'post'])->select(['post_id', 'user_id', 'comment_des', 'created_at'])->get();
+
+
+        return view('frontend.pages.blog_detailes', compact('comments'));
     }
 
     /**

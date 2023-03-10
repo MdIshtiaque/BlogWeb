@@ -10,14 +10,16 @@
             <div class="row">
                 <div class="col-lg-9 col-12">
                     <div class="blog-details-wrap">
-                        <img src="{{ asset('uploads/post') }}/{{ $posts->image }}" alt="" height="300" width="300">
-                        <h3>{{ $posts->title }}</h3>
+                        @foreach ($comments as $comment)
+                        <img src="{{ asset('uploads/post') }}/{{ $comment->post->image }}" alt="" height="300" width="300">
+                        <h3>{{ $comment->post->title }}</h3>
                         <ul class="meta">
-                            <li>{{ $posts->created_at->format('d M Y') }}</a></li>
+                            <li>{{ $comment->post->created_at->format('d M Y') }}</a></li>
                             </li>
-                            <li>{{ $posts->creator_name }}</li>
+                            <li>{{ $comment->post->creator_name }}</li>
                         </ul>
-                        <p>{{ $posts->description }}</p>
+                        <p>{{ $comment->post->description }}</p>
+                        @endforeach
                         <div class="share-wrap">
                             <div class="row">
                                 <div class="col-sm-7 ">
@@ -36,9 +38,10 @@
                             </div>
                         </div>
                     </div>
+                    <h3 class="blog-title">Comments:</h3>
+                    @foreach ($comments as $comment)
                     <div class="comment-form-area">
                         <div class="comment-main">
-                            <h3 class="blog-title"><span>(03)</span>Comments:</h3>
                             <ol class="comments">
                                 <li class="comment even thread-even depth-1">
                                     <div class="comment-wrap">
@@ -47,17 +50,16 @@
                                                 <img src="assets/images/comment/1.png" alt="Jhon">
                                             </div>
                                         </div>
-                                        @foreach ($comments as $comment)
 
 
                                         <div class="comment-main-area">
                                             <div class="comment-wrapper">
                                                 <div class="sewl-comments-meta">
 
-                                                    @if ($comment->user_id === $users->id)
 
-                                                    <h4>{{ $users->name }} </h4>
-                                                    @endif
+
+                                                    <h4>{{ $comment->user->name }} </h4>
+
 
 
                                                     <span>{{ $comment->created_at->format('d M Y') }}</span>
@@ -68,24 +70,28 @@
                                             </div>
                                         </div>
 
-                                        @endforeach
                                     </div>
 
                                 </li>
                             </ol>
                         </div>
+
+                        @endforeach
                         <div id="respond" class="sewl-comment-form comment-respond form-style">
                             <h3 id="reply-title" class="blog-title">Leave a <span>comment</span></h3>
                             <form novalidate="" method="post" id="commentform" class="comment-form" action="{{ route('detailes.store') }}">
                                 @csrf
-                                    <div class="col-12">
-                                        <div class="sewl-form-textarea no-padding-right">
-                                            <textarea name="comment_des" tabindex="4" rows="3" cols="30"
-                                                placeholder="Write Your Comments..."></textarea>
-                                        </div>
+                                <div class="col-12">
+                                    <div class="sewl-form-textarea no-padding-right">
+                                        <textarea name="comment_des" tabindex="4" rows="3" cols="30"
+                                        placeholder="Write Your Comments..."></textarea>
                                     </div>
+                                </div>
+                                    @foreach ($comments as $comment)
+
                                     <input type="text" name="user_id" hidden value="{{ Auth::user()->id }}" id="">
-                                    <input type="text" name="post_id" value="{{ $posts->id }}" hidden id="">
+                                    @endforeach
+                                    <input type="text" name="post_id" value="{{ $comment->post->id }}" hidden id="">
                                     <div class="col-12">
                                         <div class="form-submit">
                                             <input name="submit" id="submit" value="Send" type="submit">

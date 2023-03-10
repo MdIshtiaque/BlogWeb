@@ -54,7 +54,9 @@ class CommentController extends Controller
     {
         $comment = Comment::create([
             'post_id' => $request->post_id,
-            'comment_des' => $request->comment_des
+            'comment_des' => $request->comment_des,
+            'user_id' => auth()->id()
+
         ]);
 
 
